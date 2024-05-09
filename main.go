@@ -1,23 +1,32 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"net/http"
 )
 
-func division(a, b float32) (float32, error) {
-	if b == 0 {
-		return 0, errors.New("impossible de diviser par 0")
-	}
+const port = ":5000"
 
-	return a / b, nil
+func Home(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintf(w, "Bienvenue sur votre appication web")
+}
+
+func Contact(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintf(w, "Je suis très content de moi")
+}
+
+func Moi(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintf(w, "Je suis un developpeur backend, je viens de commencer le backend avec le langage Go et j'esperer devenir un boss en langage Golang")
 }
 
 func main() {
-	resultat, err := division(5, 2)
-	if err != nil {
-		panic(err)
-	}
+	// http permet de gerer ce qui va être écrit sur la page
+	// Il prend en paramettre la route et la function 
+	http.HandleFunc("/", Home)
+	http.HandleFunc("/contact", Contact)
+	http.HandleFunc("/moi", Moi)
 
-	fmt.Println(resultat)
+	fmt.Println("http://localhost:5000 server started on port", port)
+
+	http.ListenAndServe(port, nil)
 }
